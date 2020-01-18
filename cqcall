@@ -1,4 +1,4 @@
-log "Version 4"
+log "Version 5"
 set myradio to "ft991a"
 set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
 set myprocess to "wsjtx_" & myradio
