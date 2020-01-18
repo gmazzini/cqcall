@@ -54,7 +54,7 @@ tell application "System Events" to tell process "wsjtx_ft991a"
         set myitem to item jj of mylist as text
         set mymsg to text 25 thru -1 of myitem
         if mymsg starts with "-----" then
-          set myband to text from (1+(offest of " " in mymsg)) thru -2 of mymsg
+          set myband to text from (1+(offset of " " in mymsg)) thru -2 of mymsg
           if myband is equal to 160 then set myfreqrun to 1
           if myband is equal to 80 then set myfreqrun to 3
           if myband is equal to 60 then set myfreqrun to 5
