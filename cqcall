@@ -2,6 +2,7 @@ log "Version 5"
 set myradio to "ft991a"
 set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
 set myprocess to "wsjtx_" & myradio
+
 tell application "System Events" to tell process myprocess
   set mymain to name of front window
   set mytx6 to radio button 3 of group 1 of group 1 of window mymain
@@ -43,7 +44,6 @@ tell application "System Events" to tell process myprocess
         set myrows to myrows-1
         if myrows is 0 then exit repeat
       end repeat
-      log listcall 
 
       -- read the band activity
       set myframe to text area 2 of splitter group 1 of window mymain
@@ -121,6 +121,7 @@ tell application "System Events" to tell process myprocess
         end repeat
         if myswap is equal to 0 then exit repeat
       end repeat
+log cqcall
 
       -- select the call 
       set mylim to count cqcall
