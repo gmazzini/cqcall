@@ -47,7 +47,7 @@ tell application "System Events" to tell process "wsjtx_ft991a"
       set mylist to paragraphs of mytext
       set mylen to count mylist
 
-      -- identity the frequency
+      -- identity the transmitting frequency
       set myfreqrun to 0
       set jj to mylen
       repeat
