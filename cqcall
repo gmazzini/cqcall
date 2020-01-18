@@ -1,130 +1,131 @@
 on run argv
 
--- initialization
-set mytype to item 1 of argv
-log "Version 6 for " & mytype
-set myradio to "ft991a"
-set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
-set myprocess to "wsjtx_" & myradio
+  -- initialization
+  set mytype to item 1 of argv
+  log "Version 6 for " & mytype
+  set myradio to "ft991a"
+  set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
+  set myprocess to "wsjtx_" & myradio
 
-tell application "System Events" to tell process myprocess
-  set mymain to name of front window
-  set mytx6 to radio button 3 of group 1 of group 1 of window mymain
+  tell application "System Events" to tell process myprocess
+    set mymain to name of front window
+    set mytx6 to radio button 3 of group 1 of group 1 of window mymain
+    
+    repeat
+      if (value of attribute "AXValue" of mytx6) is equal to 1 then
   
-  repeat
-    if (value of attribute "AXValue" of mytx6) is equal to 1 then
-
-      -- read the log
-      set fhh to open for access myfile
-      set myallrows to paragraphs of (read fhh)
-      close access fhh
-      set myrows to count myallrows
-
-      -- process the log
-      set listcall to {}
-      repeat
-        set myrow to item myrows of myallrows as text
-        set myel to offset of "<call:" in myrow
-        if myel greater than 0 then
-          set myaux to myel-2+(offset of ">" in (text myel thru -1 of myrow))
-          set mycalllen to text (myel+6) thru myaux of myrow
-          set mycall to text (myaux+2) thru (myaux+mycalllen+1) of myrow
-          set myel to offset of "<freq:" in myrow
-          set myaux to myel-2+(offset of ">" in (text myel thru -1 of myrow))
-          set myfreqlen to text (myel+6) thru myaux of myrow
-          set myfreq to text (myaux+2) thru (myaux+myfreqlen+1) of myrow
-          set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
-          set myexit to 0
-          repeat with i from 1 to (count of listcall)
-            if call of item i of listcall is equal to mycall and mhz of item i of listcall is equal to mymhz then
-              set myexit to i 
-              exit repeat
+        -- read the log
+        set fhh to open for access myfile
+        set myallrows to paragraphs of (read fhh)
+        close access fhh
+        set myrows to count myallrows
+  
+        -- process the log
+        set listcall to {}
+        repeat
+          set myrow to item myrows of myallrows as text
+          set myel to offset of "<call:" in myrow
+          if myel greater than 0 then
+            set myaux to myel-2+(offset of ">" in (text myel thru -1 of myrow))
+            set mycalllen to text (myel+6) thru myaux of myrow
+            set mycall to text (myaux+2) thru (myaux+mycalllen+1) of myrow
+            set myel to offset of "<freq:" in myrow
+            set myaux to myel-2+(offset of ">" in (text myel thru -1 of myrow))
+            set myfreqlen to text (myel+6) thru myaux of myrow
+            set myfreq to text (myaux+2) thru (myaux+myfreqlen+1) of myrow
+            set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
+            set myexit to 0
+            repeat with i from 1 to (count of listcall)
+              if call of item i of listcall is equal to mycall and mhz of item i of listcall is equal to mymhz then
+                set myexit to i 
+                exit repeat
+              end if
+            end repeat
+            if myexit is equal to 0 then
+              copy {call:mycall, mhz:mymhz} to the end of listcall
             end if
-          end repeat
-          if myexit is equal to 0 then
-            copy {call:mycall, mhz:mymhz} to the end of listcall
           end if
-        end if
-        set myrows to myrows-1
-        if myrows is 0 then exit repeat
-      end repeat
-
-      -- read the band activity
-      set myframe to text area 2 of splitter group 1 of window mymain
-      set mytext to value of attribute "AXValue" of myframe
-      set mylist to paragraphs of mytext
-      set mylen to count mylist
-
-      -- identity the transmitting frequency
-      set myfreqrun to 0
-      set jj to mylen
-      repeat
-        set myitem to item jj of mylist as text
-        set mymsg to text 25 thru -1 of myitem
-        if mymsg starts with "-----" then
-          set myband to text from (1+(offset of " " in mymsg)) thru -2 of mymsg
-          if myband is equal to 160 then set myfreqrun to 1
-          if myband is equal to 80 then set myfreqrun to 3
-          if myband is equal to 60 then set myfreqrun to 5
-          if myband is equal to 40 then set myfreqrun to 7
-          if myband is equal to 30 then set myfreqrun to 10
-          if myband is equal to 20 then set myfreqrun to 14
-          if myband is equal to 17 then set myfreqrun to 18
-          if myband is equal to 15 then set myfreqrun to 21
-          if myband is equal to 12 then set myfreqrun to 24
-          if myband is equal to 10 then set myfreqrun to 28
-          if myband is equal to 6 then set myfreqrun to 50
-          if myband is equal to 2 then set myfreqrun to 144
-          exit repeat
-        end if
-        set jj to jj-1
-        if jj is 0 then exit repeat
-      end repeat
-      
-      -- process the band activity and extract cq calls
-      set cqcall to {}
-      set myfreqrun to 0
-      set jj to mylen
-      repeat
-        set myitem to item jj of mylist as text
-        set mymsg to text 25 thru -1 of myitem
-        if mymsg starts with "-----" then exit repeat
-        if mymsg starts with "CQ " then
-          set mycall to text from 4 thru (2+(offset of " " in (text 4 thru -1 of mymsg))) of mymsg
-          set lenmycall to (get count of characters in mycall)
-          if lenmycall is equal to 2 then
-            set mycall to text from 7 thru (5+(offset of " " in (text 7 thru -1 of mymsg))) of mymsg
-          end if
-          set myexit to 0
-          repeat with i from 1 to (count of listcall)
-            if call of item i of listcall is equal to mycall and mhz of item i of listcall is equal to myfreqrun then
-              set myexit to i
-              exit repeat
-            end if
-          end repeat
-          if myexit is equal to 0 then
-            set mysig to text 8 thru 10 of myitem
-            set myfreq to text 17 thru 20 of myitem
-            copy {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
-          end if
-        end if
-        set jj to jj-1
-        if jj is 0 then exit repeat
-      end repeat
-
-      -- sort the cq calls
-      repeat
-        set myswap to 0
-        repeat with i from 1 to ((count of cqcall)-1)
-          if sig of item (i+1) of cqcall < sig of item i of cqcall then
-            set temp to item i of cqcall
-            set item i of cqcall to item (i+1) of cqcall
-            set item (i+1) of cqcall to temp
-            set myswap to myswap+1
-          end if
+          set myrows to myrows-1
+          if myrows is 0 then exit repeat
         end repeat
-        if myswap is equal to 0 then exit repeat
-      end repeat
+
+        -- read the band activity
+        set myframe to text area 2 of splitter group 1 of window mymain
+        set mytext to value of attribute "AXValue" of myframe
+        set mylist to paragraphs of mytext
+        set mylen to count mylist
+
+        -- identity the transmitting frequency
+        set myfreqrun to 0
+        set jj to mylen
+        repeat
+          set myitem to item jj of mylist as text
+          set mymsg to text 25 thru -1 of myitem
+          if mymsg starts with "-----" then
+            set myband to text from (1+(offset of " " in mymsg)) thru -2 of mymsg
+            if myband is equal to 160 then set myfreqrun to 1
+            if myband is equal to 80 then set myfreqrun to 3
+            if myband is equal to 60 then set myfreqrun to 5
+            if myband is equal to 40 then set myfreqrun to 7
+            if myband is equal to 30 then set myfreqrun to 10
+            if myband is equal to 20 then set myfreqrun to 14
+            if myband is equal to 17 then set myfreqrun to 18
+            if myband is equal to 15 then set myfreqrun to 21
+            if myband is equal to 12 then set myfreqrun to 24
+            if myband is equal to 10 then set myfreqrun to 28
+            if myband is equal to 6 then set myfreqrun to 50
+            if myband is equal to 2 then set myfreqrun to 144
+            exit repeat
+          end if
+          set jj to jj-1
+          if jj is 0 then exit repeat
+        end repeat
+log "myfreqrun:" & myfreqrun
+
+        -- process the band activity and extract cq calls
+        set cqcall to {}
+        set myfreqrun to 0
+        set jj to mylen
+        repeat
+          set myitem to item jj of mylist as text
+          set mymsg to text 25 thru -1 of myitem
+          if mymsg starts with "-----" then exit repeat
+          if mymsg starts with "CQ " then
+            set mycall to text from 4 thru (2+(offset of " " in (text 4 thru -1 of mymsg))) of mymsg
+            set lenmycall to (get count of characters in mycall)
+            if lenmycall is equal to 2 then
+              set mycall to text from 7 thru (5+(offset of " " in (text 7 thru -1 of mymsg))) of mymsg
+            end if
+            set myexit to 0
+            repeat with i from 1 to (count of listcall)
+              if call of item i of listcall is equal to mycall and mhz of item i of listcall is equal to myfreqrun then
+                set myexit to i
+                exit repeat
+              end if
+            end repeat
+            if myexit is equal to 0 then
+              set mysig to text 8 thru 10 of myitem
+              set myfreq to text 17 thru 20 of myitem
+              copy {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
+            end if
+          end if
+          set jj to jj-1
+          if jj is 0 then exit repeat
+        end repeat
+
+        -- sort the cq calls
+        repeat
+          set myswap to 0
+          repeat with i from 1 to ((count of cqcall)-1)
+            if sig of item (i+1) of cqcall < sig of item i of cqcall then
+              set temp to item i of cqcall
+              set item i of cqcall to item (i+1) of cqcall
+              set item (i+1) of cqcall to temp
+              set myswap to myswap+1
+            end if
+          end repeat
+          if myswap is equal to 0 then exit repeat
+        end repeat
 log cqcall
 
       -- select the call 
