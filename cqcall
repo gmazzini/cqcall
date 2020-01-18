@@ -1,6 +1,8 @@
+log "Version 4"
 set myradio to "ft991a"
 set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
-tell application "System Events" to tell process "wsjtx_" & myradio
+set myprocess to "wsjtx_" & myradio
+tell application "System Events" to tell process myprocess
   set mymain to name of front window
   set mytx6 to radio button 3 of group 1 of group 1 of window mymain
   
