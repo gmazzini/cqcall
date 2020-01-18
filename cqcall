@@ -1,0 +1,132 @@
+set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X/wsjtx_log.adi"
+tell application "System Events" to tell process "wsjtx_ft991a"
+  set mymain to name of front window
+  set mytx6 to radio button 3 of group 1 of group 1 of window mymain
+  repeat
+    if (value of attribute "AXValue" of mytx6) is equal to 1 then
+
+      -- read the log
+      set fhh to open for access myfile
+      set myallrows to paragraphs of (read fhh)
+      close access fhh
+      set myrows to count myallrows
+
+      -- process the log
+      set listcall to {}
+      repeat
+        set myrow to item myrows of myallrows as text
+        set myel to offset of "<call:" in myrow
+        if myel greater than 0 then
+          set myaux to myel-2+(offset of ">" in (text myel thru -1 of myrow))
+          set mycalllen to text (myel+6) thru myaux of myrow
+          set mycall to text (myaux+2) thru (myaux+mycalllen+1) of myrow
+          set myel to offset of "<freq:" in myrow
+          set myaux to myel-2+(offset of ">" in (text myel thru -1 of myrow))
+          set myfreqlen to text (myel+6) thru myaux of myrow
+          set myfreq to text (myaux+2) thru (myaux+myfreqlen+1) of myrow
+          set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
+          set myexit to 0
+          repeat with i from 1 to (count of listcall)
+            if call of item i of listcall is equal to mycall then
+              set myexit to i 
+              exit repeat
+            end if
+          end repeat
+          if myexit is equal to 0 then
+            copy {call:mycall, mhz:mymhz} to the end of listcall
+          end if
+        end if
+        set myrows to myrows-1
+        if myrows is 0 then exit repeat
+      end repeat
+
+      -- read the band activity
+      set myframe to text area 2 of splitter group 1 of window mymain
+      set mytext to value of attribute "AXValue" of myframe
+      set mylist to paragraphs of mytext
+      set mylen to count mylist
+
+      -- process the band activity and extract cq call
+      set cqcall to {}
+      repeat
+        set myitem to item mylen of mylist as text
+        set mymsg to text 25 thru -1 of myitem
+        if mymsg starts with "-----" then exit repeat
+        if mymsg starts with "CQ " then
+          set mycall to text from 4 thru (2+(offset of " " in (text 4 thru -1 of mymsg))) of mymsg
+          set lenmycall to (get count of characters in mycall)
+          if lenmycall is equal to 2 then
+            set mycall to text from 7 thru (5+(offset of " " in (text 7 thru -1 of mymsg))) of mymsg
+          end if
+          set myexit to 0
+          repeat with i from 1 to (count of listcall)
+            if call of item i of listcall is equal to mycall then
+              set myexit to i
+              exit repeat
+            end if
+          end repeat
+          if myexit is equal to 0 then
+            set mysig to text 8 thru 10 of myitem
+            set myfreq to text 17 thru 20 of myitem
+            copy {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
+          end if
+        end if
+        set mylen to mylen-1
+        if mylen is 0 then exit repeat
+      end repeat
+
+      -- sort the cq call
+      repeat
+        set myswap to 0
+        repeat with i from 1 to ((count of cqcall)-1)
+          if sig of item (i+1) of cqcall < sig of item i of cqcall then
+            set temp to item i of cqcall
+            set item i of cqcall to item (i+1) of cqcall
+            set item (i+1) of cqcall to temp
+            set myswap to myswap+1
+          end if
+        end repeat
+        if myswap is equal to 0 then exit repeat
+      end repeat
+
+      -- select the call 
+      set mylim to count cqcall
+      if mylim is greater than 0 then
+        if mylim is greater than 3 then set mylim to 3
+        set mysel to random number from 1 to mylim
+        set UTC to ((current date) - (time to GMT)) as text
+        set myutc to text ((offset of "at " in UTC)+3) thru -1 of UTC
+        log myutc & " " &(call of item mysel of cqcall) & " " & (sig of item mysel of cqcall) & " " & (freq of item mysel of cqcall)
+
+        -- set call rxfreq rxsig
+        set value of text field "DX Call" of window mymain to (call of item mysel of cqcall)
+        set rxfreq to incrementor 2 of group 1 of window mymain
+        tell rxfreq
+          set p to position
+          set s to size
+          set xx to (item 1 of p) + (item 1 of s) -4
+          set yy to (item 2 of p) + (item 2 of s) / 2
+          do shell script "/Users/gmazzini/Desktop/scriptclick/MouseTools -doubleLeftClick -x " & xx & " -y " & yy
+          key code 51
+          keystroke (sig of item mysel of cqcall)
+        end tell
+        set rxsig to incrementor 1 of group 1 of window mymain
+        tell rxsig
+          set p to position
+          set s to size
+          set xx to (item 1 of p) + (item 1 of s) -4
+          set yy to (item 2 of p) + (item 2 of s) / 2
+          do shell script "/Users/gmazzini/Desktop/scriptclick/MouseTools -doubleLeftClick -x " & xx & " -y " & yy
+          key code 51
+          keystroke (freq of item mysel of cqcall)
+        end tell  
+
+        -- set TX1
+        set mytx1 to button "Tx 1" of group 1 of group 1 of window mymain
+        click mytx1
+
+      end if
+    end if
+    delay 60
+  end repeat
+end tell
