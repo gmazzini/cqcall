@@ -47,10 +47,37 @@ tell application "System Events" to tell process "wsjtx_ft991a"
       set mylist to paragraphs of mytext
       set mylen to count mylist
 
-      -- process the band activity and extract cq call
-      set cqcall to {}
+      -- identity the frequency
+      set myfreqrun to 0
+      set jj to mylen
       repeat
-        set myitem to item mylen of mylist as text
+        set myitem to item jj of mylist as text
+        set mymsg to text 25 thru -1 of myitem
+        if mymsg starts with "-----" then
+          set myband to text from (1+(offest of " " in mymsg)) thru -2 of mymsg
+          if myband is equal to 160 then set myfreqrun to 1
+          if myband is equal to 80 then set myfreqrun to 3
+          if myband is equal to 60 then set myfreqrun to 5
+          if myband is equal to 40 then set myfreqrun to 7
+          if myband is equal to 30 then set myfreqrun to 10
+          if myband is equal to 20 then set myfreqrun to 14
+          if myband is equal to 17 then set myfreqrun to 18
+          if myband is equal to 15 then set myfreqrun to 21
+          if myband is equal to 12 then set myfreqrun to 24
+          if myband is equal to 10 then set myfreqrun to 28
+          if myband is equal to 2 then set myfreqrun to 144
+          exit repeat
+        end if
+        set jj to jj-1
+        if jj is 0 then exit repeat
+      end repeat
+      
+      -- process the band activity and extract cq calls
+      set cqcall to {}
+      set myfreqrun to 0
+      set jj to mylen
+      repeat
+        set myitem to item jj of mylist as text
         set mymsg to text 25 thru -1 of myitem
         if mymsg starts with "-----" then exit repeat
         if mymsg starts with "CQ " then
@@ -72,11 +99,11 @@ tell application "System Events" to tell process "wsjtx_ft991a"
             copy {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
           end if
         end if
-        set mylen to mylen-1
-        if mylen is 0 then exit repeat
+        set jj to jj-1
+        if jj is 0 then exit repeat
       end repeat
 
-      -- sort the cq call
+      -- sort the cq calls
       repeat
         set myswap to 0
         repeat with i from 1 to ((count of cqcall)-1)
