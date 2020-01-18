@@ -2,6 +2,7 @@ set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X/wsjtx_log.adi"
 tell application "System Events" to tell process "wsjtx_ft991a"
   set mymain to name of front window
   set mytx6 to radio button 3 of group 1 of group 1 of window mymain
+  
   repeat
     if (value of attribute "AXValue" of mytx6) is equal to 1 then
 
@@ -27,7 +28,7 @@ tell application "System Events" to tell process "wsjtx_ft991a"
           set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
           set myexit to 0
           repeat with i from 1 to (count of listcall)
-            if call of item i of listcall is equal to mycall then
+            if call of item i of listcall is equal to mycall and mhz of item i of listcall is equal to mymhz then
               set myexit to i 
               exit repeat
             end if
