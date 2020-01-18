@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set mytype to item 1 of argv
-  log "Version 16 for " & mytype
+  log "Version 18 for " & mytype
   set myradio to "ft991a"
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
@@ -80,9 +80,7 @@ on run argv
           set jj to jj-1
           if jj is 0 then exit repeat
         end repeat
-log "myfreqrun:" & myfreqrun & " " & myband
-log listcall
-
+        
         -- process the band activity and extract cq calls
         set cqcall to {}
         set jj to mylen
@@ -98,7 +96,6 @@ log listcall
             end if
             set myexit to 0
             repeat with i from 1 to (count of listcall)
-log i & " " & (call of item i of listcall) & " " & mycall & " " & (mhz of item i of listcall) & " " & myfreqrun
               if (call of item i of listcall is equal to mycall) and (mhz of item i of listcall is equal to myfreqrun) then
                 set myexit to i
                 exit repeat
@@ -127,7 +124,6 @@ log i & " " & (call of item i of listcall) & " " & mycall & " " & (mhz of item i
           end repeat
           if myswap is equal to 0 then exit repeat
         end repeat
-log cqcall
 
         -- select the call 
         set mylim to count cqcall
