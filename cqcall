@@ -65,6 +65,7 @@ tell application "System Events" to tell process "wsjtx_ft991a"
           if myband is equal to 15 then set myfreqrun to 21
           if myband is equal to 12 then set myfreqrun to 24
           if myband is equal to 10 then set myfreqrun to 28
+          if myband is equal to 6 then set myfreqrun to 50
           if myband is equal to 2 then set myfreqrun to 144
           exit repeat
         end if
