@@ -128,45 +128,45 @@ log "myfreqrun:" & myfreqrun & " " & myband
         end repeat
 log cqcall
 
-      -- select the call 
-      set mylim to count cqcall
-      if mylim is greater than 0 then
-        if mylim is greater than 3 then set mylim to 3
-        set mysel to random number from 1 to mylim
-        set UTC to ((current date) - (time to GMT)) as text
-        set myutc to text ((offset of "at " in UTC)+3) thru -1 of UTC
-        log myutc & " " &(call of item mysel of cqcall) & " " & (sig of item mysel of cqcall) & " " & (freq of item mysel of cqcall)
+        -- select the call 
+        set mylim to count cqcall
+        if mylim is greater than 0 then
+          if mylim is greater than 3 then set mylim to 3
+          set mysel to random number from 1 to mylim
+          set UTC to ((current date) - (time to GMT)) as text
+          set myutc to text ((offset of "at " in UTC)+3) thru -1 of UTC
+          log myutc & " " &(call of item mysel of cqcall) & " " & (sig of item mysel of cqcall) & " " & (freq of item mysel of cqcall)
 
-        -- set call rxfreq rxsig
-        set value of text field "DX Call" of window mymain to (call of item mysel of cqcall)
-        set rxfreq to incrementor 2 of group 1 of window mymain
-        tell rxfreq
-          set p to position
-          set s to size
-          set xx to (item 1 of p) + (item 1 of s) -4
-          set yy to (item 2 of p) + (item 2 of s) / 2
-          do shell script "/Users/gmazzini/Desktop/scriptclick/MouseTools -doubleLeftClick -x " & xx & " -y " & yy
-          key code 51
-          keystroke (sig of item mysel of cqcall)
-        end tell
-        set rxsig to incrementor 1 of group 1 of window mymain
-        tell rxsig
-          set p to position
-          set s to size
-          set xx to (item 1 of p) + (item 1 of s) -4
-          set yy to (item 2 of p) + (item 2 of s) / 2
-          do shell script "/Users/gmazzini/Desktop/scriptclick/MouseTools -doubleLeftClick -x " & xx & " -y " & yy
-          key code 51
-          keystroke (freq of item mysel of cqcall)
-        end tell  
+          -- set call rxfreq rxsig
+          set value of text field "DX Call" of window mymain to (call of item mysel of cqcall)
+          set rxfreq to incrementor 2 of group 1 of window mymain
+          tell rxfreq
+            set p to position
+            set s to size
+            set xx to (item 1 of p) + (item 1 of s) -4
+            set yy to (item 2 of p) + (item 2 of s) / 2
+            do shell script "/Users/gmazzini/Desktop/scriptclick/MouseTools -doubleLeftClick -x " & xx & " -y " & yy
+            key code 51
+            keystroke (sig of item mysel of cqcall)
+          end tell
+          set rxsig to incrementor 1 of group 1 of window mymain
+          tell rxsig
+            set p to position
+            set s to size
+            set xx to (item 1 of p) + (item 1 of s) -4
+            set yy to (item 2 of p) + (item 2 of s) / 2
+            do shell script "/Users/gmazzini/Desktop/scriptclick/MouseTools -doubleLeftClick -x " & xx & " -y " & yy
+            key code 51
+            keystroke (freq of item mysel of cqcall)
+          end tell  
 
-        -- set TX1
-        set mytx1 to button "Tx 1" of group 1 of group 1 of window mymain
-        click mytx1
+          -- set TX1
+          set mytx1 to button "Tx 1" of group 1 of group 1 of window mymain
+          click mytx1
 
+        end if
       end if
-    end if
-    delay 60
-  end repeat
-end tell
+      delay 60
+    end repeat
+  end tell
 end run
