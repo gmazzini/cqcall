@@ -80,7 +80,7 @@ on run argv
           set jj to jj-1
           if jj is 0 then exit repeat
         end repeat
-log "myfreqrun:" & myfreqrun
+log "myfreqrun:" & myfreqrun & " " & myband
 
         -- process the band activity and extract cq calls
         set cqcall to {}
