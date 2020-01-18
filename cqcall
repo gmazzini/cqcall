@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set mytype to item 1 of argv
-  log "Version 13 for " & mytype
+  log "Version 14 for " & mytype
   set myradio to "ft991a"
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
@@ -99,7 +99,7 @@ log listcall
             end if
             set myexit to 0
             repeat with i from 1 to (count of listcall)
-log i " " & (call of item i of listcall) & " " mycall & " " & (mhz of item i of listcall) & " " myfreqrun
+log i & " " & (call of item i of listcall) & " " & mycall & " " & (mhz of item i of listcall) & " " & myfreqrun
               if (call of item i of listcall is equal to mycall) and (mhz of item i of listcall is equal to myfreqrun) then
                 set myexit to i
                 exit repeat
