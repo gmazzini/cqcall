@@ -2,13 +2,23 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 22 for " & myradio
+  log "Version 23 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
 
   tell application "System Events" to tell process myprocess
-    set mymain to name of windows 1 
-    if mymain is equal to "" then set mymain to name of windows 2
+    set mywins to name of windows
+    repeat with aa from 1 to length of mywins
+      set mya1 to text item aa of mywins
+      if "K1JT" is in mya1 then
+        set myidwin to aa
+        exit repeat
+      end if
+    end repeat
+    set mymain to text item myidwin of mywins
+    
+    -- set mymain to name of windows 1 
+    -- if mymain is equal to "" then set mymain to name of windows 2
     set mytx6 to radio button 3 of group 1 of group 1 of window mymain
     
     repeat
