@@ -1,9 +1,8 @@
 on run argv
 
   -- initialization
-  set mytype to item 1 of argv
-  log "Version 2 for " & mytype
-  set myradio to "ft991a"
+  set myradio to item 1 of argv
+  log "Version 3 for " & myradio
   set myprocess to "wsjtx_" & myradio
 
   tell application "System Events" to tell process myprocess
