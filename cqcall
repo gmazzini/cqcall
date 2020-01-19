@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 19 for " & myradio
+  log "Version 21 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
 
@@ -89,8 +89,13 @@ on run argv
           if mymsg starts with "-----" then exit repeat
           if mymsg starts with "CQ " then
             set mycall to text from 4 thru (2+(offset of " " in (text 4 thru -1 of mymsg))) of mymsg
-            set lenmycall to (get count of characters in mycall)
-            if lenmycall is equal to 2 then
+            set lenmycall to (get count of characters in mycall)            
+            set mydig to 0
+            repeat with zz from 1 to lenmycall
+              set xx to item zz of mycall
+              if xx is in "1234567890" then set mydig to mydig+1
+            end repeat
+            if mydig is equal to 0 then
               set mycall to text from 7 thru (5+(offset of " " in (text 7 thru -1 of mymsg))) of mymsg
             end if
             set myexit to 0
