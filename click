@@ -2,13 +2,22 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 3 for " & myradio
+  log "Version 4 for " & myradio
   set myprocess to "wsjtx_" & myradio
 
   tell application "System Events" to tell process myprocess
     
-    -- main widow, Enable Tx, log window and Tx 6 discovery
-    set mymain to name of front window
+    -- main window, Enable Tx, log window and Tx 6 discovery
+    set mywins to name of windows
+    repeat with aa from 1 to length of mywins
+      set mya1 to text item aa of mywins
+      if "K1JT" is in mya1 then
+        set myidwin to aa
+        exit repeat
+      end if
+    end repeat
+    set mymain to text item myidwin of mywins
+
     set mylog to mymain & " - Log QSO"
     set thecheckbox to checkbox "Enable Tx" of window mymain
     click button "Log QSO" of window mymain
