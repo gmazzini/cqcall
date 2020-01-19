@@ -1,9 +1,8 @@
 on run argv
 
   -- initialization
-  set mytype to item 1 of argv
-  log "Version 18 for " & mytype
-  set myradio to "ft991a"
+  set myradio to item 1 of argv
+  log "Version 19 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
 
