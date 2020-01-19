@@ -30,6 +30,9 @@ on run argv
           set yy to (item 2 of p) + (item 2 of s) / 2
           if exists logwin
             click button "OK" of group 1 of logwin
+            set UTC to ((current date) - (time to GMT)) as text
+            set myutc to text ((offset of "at " in UTC)+3) thru -1 of UTC
+            log myutc & " log"
           else
             click thetx6
           end if
