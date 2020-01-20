@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 26 for " & myradio
+  log "Version 27 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
 
@@ -106,7 +106,7 @@ on run argv
           else 
             set mysdiff to mysutc-mystax
           end if          
-          if mymsg starts with "CQ " and mysdiff is less than 300 then
+          if (mymsg starts with "CQ ") and (mysdiff is less than 300) then
             set myen0 to 2
             set myen1 to myen0+(offset of " " in (text (2+myen0) thru -1 of mymsg))
             set mycall to text from (2+myen0) thru myen1 of mymsg
