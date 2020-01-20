@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 27 for " & myradio
+  log "Version 28 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
 
@@ -98,7 +98,7 @@ on run argv
           set myitem to item jj of mylist as text
           set mymsg to text 25 thru -1 of myitem
           if mymsg starts with "-----" then exit repeat
-          set mytax to text 1 thru 6 of mymsg
+          set mytax to text 1 thru 6 of myitem
           set mysutc to ((text 1 thru 2 of myutc)*60+(text 4 thru 5 of myutc))*60+(text 7 thru 8 of myutc)
           set mystax to ((text 1 thru 2 of mytax)*60+(text 3 thru 4 of mytax))*60+(text 5 thru 6 of mytax)
           if (text 1 thru 2 of myutc) is less than (text 1 thru 2 of mytax) then
