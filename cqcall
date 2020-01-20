@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 25 for " & myradio
+  log "Version 26 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
 
@@ -91,12 +91,22 @@ on run argv
         
         -- process the band activity and extract cq calls
         set cqcall to {}
+        set UTC to ((current date) - (time to GMT)) as text
+        set myutc to text ((offset of "at " in UTC)+3) thru -1 of UTC
         set jj to mylen
         repeat
           set myitem to item jj of mylist as text
           set mymsg to text 25 thru -1 of myitem
           if mymsg starts with "-----" then exit repeat
-          if mymsg starts with "CQ " then
+          set mytax to text 1 thru 6 of mymsg
+          set mysutc to ((text 1 thru 2 of myutc)*60+(text 4 thru 5 of myutc))*60+(text 7 thru 8 of myutc)
+          set mystax to ((text 1 thru 2 of mytax)*60+(text 3 thru 4 of mytax))*60+(text 5 thru 6 of mytax)
+          if (text 1 thru 2 of myutc) is less than (text 1 thru 2 of mytax) then
+            set mysdiff to mysutc+24*3600-mystax
+          else 
+            set mysdiff to mysutc-mystax
+          end if          
+          if mymsg starts with "CQ " and mysdiff is less than 300 then
             set myen0 to 2
             set myen1 to myen0+(offset of " " in (text (2+myen0) thru -1 of mymsg))
             set mycall to text from (2+myen0) thru myen1 of mymsg
