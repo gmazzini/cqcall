@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 29 for " & myradio
+  log "Version 28 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
 
