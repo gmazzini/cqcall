@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 28 for " & myradio
+  log "Version 29 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myprocess to "wsjtx_" & myradio
 
@@ -158,7 +158,7 @@ on run argv
           set mysel to random number from 1 to mylim
           set UTC to ((current date) - (time to GMT)) as text
           set myutc to text ((offset of "at " in UTC)+3) thru -1 of UTC
-          log myutc & " " &(call of item mysel of cqcall) & " " & (sig of item mysel of cqcall) & " " & (freq of item mysel of cqcall)
+          log myutc & " " & myband & "m " & (call of item mysel of cqcall) & " " & (sig of item mysel of cqcall) & " " & (freq of item mysel of cqcall)
 
           -- set call rxfreq rxsig
           set value of text field "DX Call" of window mymain to (call of item mysel of cqcall)
