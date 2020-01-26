@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 5 for " & myradio
+  log "Version 6 for " & myradio
   set myprocess to "wsjtx_" & myradio
 
   tell application "System Events" to tell process myprocess
@@ -11,7 +11,7 @@ on run argv
     set mywins to name of windows
     repeat with aa from 1 to length of mywins
       set mya1 to text item aa of mywins
-      if "K1JT" is in mya1 then
+      if ("K1JT" is in mya1) and ("Log" is not in mya1) then
         set myidwin to aa
         exit repeat
       end if
