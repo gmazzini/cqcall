@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 4 for " & myradio
+  log "Version 5 for " & myradio
   set myprocess to "wsjtx_" & myradio
 
   tell application "System Events" to tell process myprocess
@@ -17,6 +17,7 @@ on run argv
       end if
     end repeat
     set mymain to text item myidwin of mywins
+    log "Win: " & mymain
 
     set mylog to mymain & " - Log QSO"
     set thecheckbox to checkbox "Enable Tx" of window mymain
