@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 30 for " & myradio
+  log "Version 31 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myblack to "/Users/gmazzini/Library/wsjtx_black.txt"
   set myprocess to "wsjtx_" & myradio
@@ -33,7 +33,7 @@ on run argv
         set fhh to open for access myblack
         set myallblacks to paragraphs of (read fhh)
         close access fhh
-        set myblacks to count myallblacks
+        set myblacks to (count myallblacks)-1
         
         -- process the log
         set listcall to {}
@@ -64,7 +64,7 @@ on run argv
           if myrows is 0 then exit repeat
         end repeat
         
-        -- process th black list
+        -- process the black list
         repeat
           set mycall to item myblacks of myallblacks as text
           set myexit to 0
@@ -77,8 +77,8 @@ on run argv
           if myexit is equal to 0 then
             copy {call:mycall, mhz:0} to the end of listcall
           end if
-          set myrows to myrows-1
-          if myrows is 0 then exit repeat
+          set myblacks to myblacks-1
+          if myblacks is 0 then exit repeat
         end repeat
         
         -- read the band activity
