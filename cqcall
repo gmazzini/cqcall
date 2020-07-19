@@ -46,7 +46,6 @@ on run argv
         set fhh to open for access myblack
         set myallblacks to paragraphs of (read fhh)
         close access fhh
-        set myblacks to (count myallblacks)-1
         
         -- process the log
         set listcall to {}
