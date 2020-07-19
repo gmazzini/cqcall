@@ -2,10 +2,23 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 31 for " & myradio
+  log "Version 32 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myblack to "/Users/gmazzini/Library/wsjtx_black.txt"
   set myprocess to "wsjtx_" & myradio
+  
+  -- fast on index function
+  on indexof(myelm,mylist)
+    set oTIDs to AppleScript's text item delimiters
+    set AppleScript's text item delimiters to return
+    set mylist to return & mylist & return
+    set AppleScript's text item delimiters to oTIDs
+    try
+      -1 + (count (paragraphs of (text 1 thru (offset of (return & myelm & return) in mylist) of mylist)))
+    on error
+      0
+    end try
+  end indexof
 
   tell application "System Events" to tell process myprocess
     set mywins to name of windows
@@ -49,36 +62,13 @@ on run argv
             set myfreqlen to text (myel+6) thru myaux of myrow
             set myfreq to text (myaux+2) thru (myaux+myfreqlen+1) of myrow
             set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
-            set myexit to 0
-            repeat with i from 1 to (count of listcall)
-              if (call of item i of listcall is equal to mycall) and (mhz of item i of listcall is equal to mymhz) then
-                set myexit to i 
-                exit repeat
-              end if
-            end repeat
-            if myexit is equal to 0 then
-              copy {call:mycall, mhz:mymhz} to the end of listcall
+            set myinsert to indexof(mycall & "_" & mymhz, listcall)            
+            if myinsert is equal to 0 then
+              copy mycall & "_" & mymhz to the end of listcall
             end if
           end if
           set myrows to myrows-1
           if myrows is 0 then exit repeat
-        end repeat
-        
-        -- process the black list
-        repeat
-          set mycall to item myblacks of myallblacks as text
-          set myexit to 0
-          repeat with i from 1 to (count of listcall)
-            if (call of item i of listcall is equal to mycall) then
-              set myexit to i
-              exit repeat
-            end if
-          end repeat
-          if myexit is equal to 0 then
-            copy {call:mycall, mhz:0} to the end of listcall
-          end if
-          set myblacks to myblacks-1
-          if myblacks is 0 then exit repeat
         end repeat
         
         -- read the band activity
@@ -144,14 +134,11 @@ on run argv
               set myen2 to myen1+(offset of " " in (text (2+myen1) thru -1 of mymsg))
               set mycall to text from (2+myen1) thru myen2 of mymsg
             end if
-            set myexit to 0
-            repeat with i from 1 to (count of listcall)
-              if (call of item i of listcall is equal to mycall) and ((mhz of item i of listcall is equal to myfreqrun) or (mhz of item i of listcall is equal to 0)) then
-                set myexit to i
-                exit repeat
-              end if
-            end repeat
-            if myexit is equal to 0 then
+            set myinsert to indexof(mycall & "_" & myfreqrun, listcall)
+            if myinsert is equal to 0 then
+                 set myinsert to indexof(mycall, myallblacks)
+            end if
+            if myinsert is equal to 0 then
               set mysig to text 8 thru 10 of myitem
               set myfreq to text 17 thru 20 of myitem
               copy {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
