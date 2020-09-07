@@ -19,7 +19,7 @@ on run argv
       0
     end try
   end indexof
-
+  
   tell application "System Events" to tell process myprocess
     set mywins to name of windows
     repeat with aa from 1 to length of mywins
@@ -75,7 +75,7 @@ on run argv
         set mytext to value of attribute "AXValue" of myframe
         set mylist to paragraphs of mytext
         set mylen to count mylist
-
+  
         -- identity the transmitting frequency
         set myfreqrun to "0"
         set jj to mylen
