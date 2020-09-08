@@ -1,3 +1,16 @@
+-- fast on index function
+on indexof(myelm,mylist)
+  set oTIDs to AppleScript's text item delimiters
+  set AppleScript's text item delimiters to return
+  set mylist to return & mylist & return
+  set AppleScript's text item delimiters to oTIDs
+  try
+    -1 + (count (paragraphs of (text 1 thru (offset of (return & myelm & return) in mylist) of mylist)))
+  on error
+    0
+  end try
+end indexof
+
 on run argv
 
   -- initialization
@@ -6,19 +19,6 @@ on run argv
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myblack to "/Users/gmazzini/Library/wsjtx_black.txt"
   set myprocess to "wsjtx_" & myradio
-  
-  -- fast on index function
-  on indexof(myelm,mylist)
-    set oTIDs to AppleScript's text item delimiters
-    set AppleScript's text item delimiters to return
-    set mylist to return & mylist & return
-    set AppleScript's text item delimiters to oTIDs
-    try
-      -1 + (count (paragraphs of (text 1 thru (offset of (return & myelm & return) in mylist) of mylist)))
-    on error
-      0
-    end try
-  end indexof
   
   tell application "System Events" to tell process myprocess
     set mywins to name of windows
