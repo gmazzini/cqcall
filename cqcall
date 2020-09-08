@@ -63,7 +63,6 @@ on run argv
             set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
             set myinsert to indexof(mycall & "_" & mymhz, listcall)            
             if myinsert is equal to 0 then
-            log mycall & "_" & mymhz
               copy mycall & "_" & mymhz to the end of listcall
             end if
           end if
