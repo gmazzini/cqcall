@@ -2,7 +2,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 42 for " & myradio
+  log "Version 43 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myblack to "/Users/gmazzini/Library/wsjtx_black.txt"
   set myprocess to "wsjtx_" & myradio
@@ -49,20 +49,19 @@ on run argv
             set myfreqlen to text (myel+6) thru myaux of myrow
             set myfreq to text (myaux+2) thru (myaux+myfreqlen+1) of myrow
             set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
-            set myexit to 0
-            repeat with i from 1 to (count of listcall)
-              if (call of item i of listcall is equal to mycall) and (mhz of item i of listcall is equal to mymhz) then
-                set myexit to i 
-                exit repeat
-              end if
-            end repeat
-            if myexit is equal to 0 then
-              copy {call:mycall, mhz:mymhz} to the end of listcall
+            set myaux to mycall & "_" & mymhz
+            if listcall not contains myaux then
+              copy myaux to the end of listcall
             end if
           end if
           set myrows to myrows-1
           if myrows is 0 then exit repeat
         end repeat
+        
+        
+        
+        
+        
         
         -- process the black list
         repeat
@@ -142,7 +141,7 @@ on run argv
             end repeat
             set mypreq to ""
             if mydig is equal to 0 then
-              set mypreq to cqcall
+              set mypreq to mycall
               set myen2 to myen1+(offset of " " in (text (2+myen1) thru -1 of mymsg))
               set mycall to text from (2+myen1) thru myen2 of mymsg
             end if
