@@ -58,23 +58,12 @@ on run argv
           if myrows is 0 then exit repeat
         end repeat
         
-        
-        
-        
-        
-        
         -- process the black list
         repeat
           set mycall to item myblacks of myallblacks as text
-          set myexit to 0
-          repeat with i from 1 to (count of listcall)
-            if (call of item i of listcall is equal to mycall) then
-              set myexit to i
-              exit repeat
-            end if
-          end repeat
-          if myexit is equal to 0 then
-            copy {call:mycall, mhz:0} to the end of listcall
+          set myaux to mycall & "_0"
+          if listcall not contains myaux then
+            copy myaux to the end of listcall
           end if
           set myblacks to myblacks-1
           if myblacks is 0 then exit repeat
@@ -145,17 +134,23 @@ on run argv
               set myen2 to myen1+(offset of " " in (text (2+myen1) thru -1 of mymsg))
               set mycall to text from (2+myen1) thru myen2 of mymsg
             end if
+            
             set myexit to 0
-            repeat with i from 1 to (count of listcall)
-              if (call of item i of listcall is equal to mycall) and ((mhz of item i of listcall is equal to myfreqrun) or (mhz of item i of listcall is equal to 0)) then
-                set myexit to i
-                exit repeat
-              end if
-            end repeat
-
+            -- check if call is in the log
+            set myaux to mycall & "_" & myfreqrun
+            if listcall contains myaux then
+              copy myexit to 1
+            end if
+            
+            -- check if cal is in the black list
+            set myaux to mycall & "_0"
+            if listcall contains myaux then
+              copy myexit to 2
+            end if
+            
             -- check and avoid particular kind of calls
             if {"DX","OC","NA","JA","VK","VKZL"} contains mypreq then
-               set myexit to 0
+               set myexit to 3
             end if
 
             if myexit is equal to 0 then
