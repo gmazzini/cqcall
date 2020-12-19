@@ -51,7 +51,7 @@ on run argv
             set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
             set myaux to mycall & "_" & mymhz
             if listcall does not contains myaux then
-              copy myaux to the end of listcall
+              set myaux to the end of listcall
             end if
           end if
           set myrows to myrows-1
@@ -63,7 +63,7 @@ on run argv
           set mycall to item myblacks of myallblacks as text
           set myaux to mycall & "_0"
           if listcall does not contains myaux then
-            copy myaux to the end of listcall
+            set myaux to the end of listcall
           end if
           set myblacks to myblacks-1
           if myblacks is 0 then exit repeat
@@ -139,13 +139,13 @@ on run argv
             -- check if call is in the log
             set myaux to mycall & "_" & myfreqrun
             if listcall contains myaux then
-              copy myexit to 1
+              set myexit to 1
             end if
             
             -- check if cal is in the black list
             set myaux to mycall & "_0"
             if listcall contains myaux then
-              copy myexit to 2
+              set myexit to 2
             end if
             
             -- check and avoid particular kind of calls
@@ -156,7 +156,7 @@ on run argv
             if myexit is equal to 0 then
               set mysig to text 8 thru 10 of myitem
               set myfreq to text 17 thru 20 of myitem
-              copy {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
+              set {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
             end if
 
           end if
