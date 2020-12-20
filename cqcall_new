@@ -51,7 +51,7 @@ on run argv
             set mymhz to text 1 thru ((offset of "." in myfreq)-1) of myfreq
             set myaux to mycall & "_" & mymhz
             if listcall does not contains myaux then
-              set myaux to the end of listcall
+              copy myaux to the end of listcall
             end if
           end if
           set myrows to myrows-1
@@ -63,7 +63,7 @@ on run argv
           set mycall to item myblacks of myallblacks as text
           set myaux to mycall & "_0"
           if listcall does not contains myaux then
-            set myaux to the end of listcall
+            copy myaux to the end of listcall
           end if
           set myblacks to myblacks-1
           if myblacks is 0 then exit repeat
