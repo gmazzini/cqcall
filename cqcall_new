@@ -156,7 +156,7 @@ on run argv
             if myexit is equal to 0 then
               set mysig to text 8 thru 10 of myitem
               set myfreq to text 17 thru 20 of myitem
-              set {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
+              copy {call:mycall, freq:myfreq, sig:mysig} to the end of cqcall      
             end if
 
           end if
