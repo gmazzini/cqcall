@@ -23,19 +23,19 @@ on run argv
     repeat
       if (value of attribute "AXValue" of mytx6) is equal to 1 then
   
-        -- read the log
+        -- reading the log
         set fhh to open for access myfile
         set myallrows to paragraphs of (read fhh)
         close access fhh
         set myrows to count myallrows
         
-        -- read the black list
+        -- reading the black list
         set fhh to open for access myblack
         set myallblacks to paragraphs of (read fhh)
         close access fhh
         set myblacks to (count myallblacks)-1
         
-        -- process the log
+        -- processing the log
         set listcall to {}
         repeat
           set myrow to item myrows of myallrows as text
@@ -58,7 +58,7 @@ on run argv
           if myrows is 0 then exit repeat
         end repeat
         
-        -- process the black list
+        -- processing the black list
         repeat
           set mycall to item myblacks of myallblacks as text
           set myaux to mycall & "_0"
@@ -69,13 +69,13 @@ on run argv
           if myblacks is 0 then exit repeat
         end repeat
         
-        -- read the band activity
+        -- reading the band activity
         set myframe to text area 2 of splitter group 1 of window mymain
         set mytext to value of attribute "AXValue" of myframe
         set mylist to paragraphs of mytext
         set mylen to count mylist
 
-        -- identity the transmitting frequency
+        -- defining the transmitting frequency
         set myfreqrun to "0"
         set jj to mylen
         repeat
@@ -83,25 +83,14 @@ on run argv
           set mymsg to text 25 thru -1 of myitem
           if mymsg starts with "-----" then
             set myband to text from (1+(offset of " " in mymsg)) thru -2 of mymsg
-            if myband is equal to "160" then set myfreqrun to "1"
-            if myband is equal to "80" then set myfreqrun to "3"
-            if myband is equal to "60" then set myfreqrun to "5"
-            if myband is equal to "40" then set myfreqrun to "7"
-            if myband is equal to "30" then set myfreqrun to "10"
-            if myband is equal to "20" then set myfreqrun to "14"
-            if myband is equal to "17" then set myfreqrun to "18"
-            if myband is equal to "15" then set myfreqrun to "21"
-            if myband is equal to "12" then set myfreqrun to "24"
-            if myband is equal to "10" then set myfreqrun to "28"
-            if myband is equal to "6" then set myfreqrun to "50"
-            if myband is equal to "2" then set myfreqrun to "144"
+            set myfreqrun to 300/myband as integer as text
             exit repeat
           end if
           set jj to jj-1
           if jj is 0 then exit repeat
         end repeat
         
-        -- process the band activity and extract cq calls
+        -- processing the band activity and extract cq calls
         set cqcall to {}
         set UTC to ((current date) - (time to GMT)) as text
         set myutc to text ((offset of "at " in UTC)+3) thru -1 of UTC
@@ -142,13 +131,13 @@ on run argv
               set myexit to 1
             end if
             
-            -- check if cal is in the black list
+            -- checking if the call is in the black list
             set myaux to mycall & "_0"
             if listcall contains myaux then
               set myexit to 2
             end if
             
-            -- check and avoid particular kind of calls
+            -- checking and avoiding particular kind of cq calls
             if {"DX","OC","NA","JA","VK","VKZL"} contains mypreq then
                set myexit to 3
             end if
@@ -164,7 +153,7 @@ on run argv
           if jj is 0 then exit repeat
         end repeat
 
-        -- sort the cq calls
+        -- sorting the cq calls
         repeat
           set myswap to 0
           repeat with i from 1 to ((count of cqcall)-1)
@@ -178,7 +167,7 @@ on run argv
           if myswap is equal to 0 then exit repeat
         end repeat
 
-        -- select the call 
+        -- selecting the cq call 
         set mylim to count cqcall
         if mylim is greater than 0 then
           if mylim is greater than 3 then set mylim to 3
