@@ -69,6 +69,8 @@ on run argv
           if myblacks is 0 then exit repeat
         end repeat
         
+        log listcall
+        
         -- reading the band activity
         set myframe to text area 2 of splitter group 1 of window mymain
         set mytext to value of attribute "AXValue" of myframe
