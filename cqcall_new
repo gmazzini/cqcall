@@ -6,6 +6,8 @@ on run argv
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myblack to "/Users/gmazzini/Library/wsjtx_black.txt"
   set myprocess to "wsjtx_" & myradio
+  set mybb to "160-080-060-040-030-020-017-015-012-010-006-002-"
+  set myff to "001-003-005-007-010-014-018-021-024-028-050-144-"
 
   tell application "System Events" to tell process myprocess
     set mywins to name of windows
@@ -69,8 +71,6 @@ on run argv
           if myblacks is 0 then exit repeat
         end repeat
         
-        log listcall
-        
         -- reading the band activity
         set myframe to text area 2 of splitter group 1 of window mymain
         set mytext to value of attribute "AXValue" of myframe
@@ -85,7 +85,12 @@ on run argv
           set mymsg to text 25 thru -1 of myitem
           if mymsg starts with "-----" then
             set myband to text from (1+(offset of " " in mymsg)) thru -2 of mymsg
-            set myfreqrun to 300/myband as integer as text
+            repeat (3-(length of (myband as string))) times
+              set myband to "0" & myband
+            end repeat
+            set myband to myband & "-"
+            set myoo to offset of myband in mybb
+            set myfreqrun to text myoo thru (myoo+2) of myff as integer
             exit repeat
           end if
           set jj to jj-1
