@@ -85,11 +85,12 @@ on run argv
           set mymsg to text 25 thru -1 of myitem
           if mymsg starts with "-----" then
             set myband to text from (1+(offset of " " in mymsg)) thru -2 of mymsg
-            repeat (3-(length of (myband as string))) times
-              set myband to "0" & myband
+            set mylookband to myband
+            repeat (3-(length of (mylookband as string))) times
+              set mylookband to "0" & mylookband
             end repeat
-            set myband to myband & "-"
-            set myoo to offset of myband in mybb
+            set mylookband to mylookband & "-"
+            set myoo to offset of mylookband in mybb
             set myfreqrun to text myoo thru (myoo+2) of myff as integer
             exit repeat
           end if
@@ -183,7 +184,7 @@ on run argv
           set mysel to random number from 1 to mylim
           set UTC to ((current date) - (time to GMT)) as text
           set myutc to text ((offset of "at " in UTC)+3) thru -1 of UTC
-          log myutc & " " & myband & "m " & (call of item mysel of cqcall) & " " & (sig of item mysel of cqcall) & " " & (freq of item mysel of cqcall)
+          log myutc & " " & myband & " " & (call of item mysel of cqcall) & " " & (sig of item mysel of cqcall) & " " & (freq of item mysel of cqcall)
 
           -- set dxcall
           set value of text field "DX Call" of window mymain to (call of item mysel of cqcall)
