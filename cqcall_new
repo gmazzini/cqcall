@@ -166,6 +166,8 @@ on run argv
           end repeat
           if myswap is equal to 0 then exit repeat
         end repeat
+        
+        log cqcall
 
         -- selecting the cq call 
         set mylim to count cqcall
