@@ -148,7 +148,7 @@ on run argv
             end if
             
             -- checking and avoiding particular kind of cq calls
-            if {"DX","OC","NA","JA","VK","VKZL"} contains mypreq then
+            if {"DX","OC","NA","JA","VK","VKZL","AS", "ASIA"} contains mypreq then
                set myexit to 3
             end if
 
