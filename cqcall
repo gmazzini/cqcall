@@ -4,7 +4,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 43 for " & myradio
+  log "Version 44 for " & myradio
   set myfile to "/Users/gmazzini/Library/Application Support/WSJT-X - " & myradio & "/wsjtx_log.adi"
   set myblack to "/Users/gmazzini/Library/wsjtx_black.txt"
   set myprocess to "wsjtx_" & myradio
@@ -148,7 +148,7 @@ on run argv
             end if
             
             -- checking and avoiding particular kind of cq calls
-            if {"DX","OC","NA","JA","VK","VKZL","AS", "ASIA"} contains mypreq then
+            if {"DX","OC","NA","JA","VK","VKZL","AS","ASIA"} contains mypreq then
                set myexit to 3
             end if
 
