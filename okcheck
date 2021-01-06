@@ -10,6 +10,7 @@ on run argv
   tell application "System Events" to tell process myprocess
     
    -- button OK of group 3 of window Settings of application process wsjtx_flex6300
+    set myidwin to 0
     set mywins to name of windows
     repeat with aa from 1 to length of mywins
       set mya1 to text item aa of mywins
@@ -18,8 +19,10 @@ on run argv
         exit repeat
       end if
     end repeat
-    set mymain to text item myidwin of mywins
-    log "Win: " & mymain
+    if (myidwin is not 0) then
+      set mymain to text item myidwin of mywins
+      log "Win: " & mymain
+    end if  
     
   end tell
 end run
