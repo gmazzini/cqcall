@@ -13,10 +13,7 @@ on run argv
     set mywins to name of windows
     repeat with aa from 1 to length of mywins
       set mya1 to text item aa of mywins
-      if ("K1JT" is in mya1) and ("Log" is not in mya1) then
-        set myidwin to aa
-        exit repeat
-      end if
+      log mya1
     end repeat
     set mymain to text item myidwin of mywins
     log "Win: " & mymain
