@@ -21,7 +21,7 @@ on run argv
     end repeat
     if (myidwin is not 0) then
       set mymain to text item myidwin of mywins
-      log "Win: " & mymain
+      click button "OK" of group 3 of window mymain
     end if  
     
   end tell
