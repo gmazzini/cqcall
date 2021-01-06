@@ -28,6 +28,8 @@ on run argv
         log ttt
       end if
       
+      delay 10
+      
     end repeat
     
   end tell
