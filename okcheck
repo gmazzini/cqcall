@@ -24,6 +24,8 @@ on run argv
       if (myidwin is not 0) then
         set mymain to text item myidwin of mywins
         click button "OK" of group 3 of window mymain
+        set ttt to (time string of (current date))
+        log ttt
       end if
       
     end repeat
