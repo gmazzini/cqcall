@@ -1,0 +1,25 @@
+-- okcheck by IK4LZH
+
+on run argv
+
+  -- initialization
+  set myradio to item 1 of argv
+  log "Version 1 for " & myradio
+  set myprocess to "wsjtx_" & myradio
+
+  tell application "System Events" to tell process myprocess
+    
+    -- button OK of group 3 of window Settings of application process wsjtx_flex6300
+    set mywins to name of windows
+    repeat with aa from 1 to length of mywins
+      set mya1 to text item aa of mywins
+      if ("K1JT" is in mya1) and ("Log" is not in mya1) then
+        set myidwin to aa
+        exit repeat
+      end if
+    end repeat
+    set mymain to text item myidwin of mywins
+    log "Win: " & mymain
+
+  end tell
+end run
