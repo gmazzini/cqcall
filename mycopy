@@ -1,0 +1,8 @@
+cd /Users/gmazzini/Desktop/scriptclick/tmp
+rm -rf cqcall
+git clone https://github.com/gmazzini/cqcall
+
+cp cqcall/cqcall /Users/gmazzini/Desktop/scriptclick
+cp cqcall/click /Users/gmazzini/Desktop/scriptclick
+cp cqcall/okcheck /Users/gmazzini/Desktop/scriptclick
+cp cqcall/wsjtx_black.txt /Users/gmazzini/Library/wsjtx_black.txt
