@@ -8,21 +8,25 @@ on run argv
   set myprocess to "wsjtx_" & myradio
 
   tell application "System Events" to tell process myprocess
+  
+    repeat
     
-   -- button OK of group 3 of window Settings of application process wsjtx_flex6300
-    set myidwin to 0
-    set mywins to name of windows
-    repeat with aa from 1 to length of mywins
-      set mya1 to text item aa of mywins
-      if ("Settings" is in mya1) then
-        set myidwin to aa
-        exit repeat
+      set myidwin to 0
+      set mywins to name of windows
+      repeat with aa from 1 to length of mywins
+        set mya1 to text item aa of mywins
+        if ("Settings" is in mya1) then
+          set myidwin to aa
+          exit repeat
+        end if
+      end repeat
+      
+      if (myidwin is not 0) then
+        set mymain to text item myidwin of mywins
+        click button "OK" of group 3 of window mymain
       end if
+      
     end repeat
-    if (myidwin is not 0) then
-      set mymain to text item myidwin of mywins
-      click button "OK" of group 3 of window mymain
-    end if  
     
   end tell
 end run
