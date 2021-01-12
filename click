@@ -4,7 +4,7 @@ on run argv
 
   -- initialization
   set myradio to item 1 of argv
-  log "Version 6 for " & myradio
+  log "Version 7 for " & myradio
   set myprocess to "wsjtx_" & myradio
 
   tell application "System Events" to tell process myprocess
@@ -27,7 +27,7 @@ on run argv
     delay 3
     set logwin to window mylog
     click button "Cancel" of group 1 of logwin
-    set thetx6 to button "Tx 6" of group 1 of group 1 of window mymain
+    set thetx6 to button "Tx 6" of group 2 of group 1 of window mymain
     delay 2
     
     tell thecheckbox
