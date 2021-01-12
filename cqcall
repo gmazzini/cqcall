@@ -216,7 +216,7 @@ on run argv
           end tell  
 
           -- set TX1
-          set mytx1 to button "Tx 1" of group 1 of group 1 of window mymain
+          set mytx1 to button "Tx 1" of group 2 of group 1 of window mymain
           click mytx1
 
         end if
