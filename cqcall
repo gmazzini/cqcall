@@ -22,7 +22,7 @@ on run argv
     end repeat
     set mymain to text item myidwin of mywins
     
-    set mytx6 to radio button 3 of group 1 of group 1 of window mymain
+    set mytx6 to radio button 2 of group 1 of group 1 of window mymain
     
     repeat
       if (value of attribute "AXValue" of mytx6) is equal to 1 then
